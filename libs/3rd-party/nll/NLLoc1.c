@@ -75,6 +75,13 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include "custom_eth/eth_functions.h"
 #endif
 
+// For macOS add fmemopen() and open_memstream() functions from:
+// https://github.com/materialsvirtuallab/pyhull/tree/master/src/fmemopen
+#ifdef __APPLE__
+#include "open_memstream-macos/open_memstream.h"
+#include "open_memstream-macos/fmemopen.h"
+#endif
+
 /** function to perform global search event locations */
 
 int NLLoc
@@ -235,7 +242,7 @@ int NLLoc
     /* read observation lines into memory stream (must read control file first) */
 
     if (n_obs_lines > 0) {
-#ifdef _GNU_SOURCE
+#if defined(_GNU_SOURCE) || defined(__APPLE__)
         size_t memory_stream_size;
         FILE *fp_memory_stream = NULL;
         // read lines into memory memory stream
